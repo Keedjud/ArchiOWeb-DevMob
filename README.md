@@ -19,10 +19,6 @@ Application mobile de « bombes » géolocalisées, développée dans le cadre d
 | `docs/` | UML, modèle de données, doc de l'API | |
 | `.github/workflows/` | Intégration continue (GitHub Actions) | |
 
-## Équipe
-
-Camilo, BenBOUM, Inoé, Elia.
-
 ## Installation et prérequis
 
 ### Éditeur
@@ -51,10 +47,20 @@ git switch -c feature/ma-fonctionnalite
 
 ### Pull requests
 
-1. Pousser sa branche puis ouvrir une PR **vers `develop`**.
-2. Au moins **1 approbation** d'un autre membre est nécessaire pour fusionner.
-3. Pour une mise en production, ouvrir une PR **`develop` → `main`** : elle demande 1 approbation et que le check CI `build` passe.
-4. Supprimer la branche une fois fusionnée.
+1. **Mettre sa branche à jour avant d'ouvrir la PR** en y fusionnant la branche cible (`develop`), puis résoudre les éventuels conflits localement :
+
+   ```bash
+   git switch develop
+   git pull
+   git switch feature/ma-fonctionnalite
+   git merge develop
+   ```
+
+2. Pousser sa branche puis ouvrir une PR **vers `develop`**, liée à une issue (`Closes #numéro`).
+3. Au moins **1 approbation** d'un autre membre est nécessaire pour fusionner.
+4. **Une PR qui a des conflits n'est pas reviewée.** C'est à l'auteur de la PR de les résoudre (en refaisant l'étape 1), puis de redemander une review.
+5. Pour une mise en production, ouvrir une PR **`develop` → `main`** : elle demande 1 approbation et que le check CI `build` passe.
+6. Supprimer la branche une fois fusionnée.
 
 Les règles sont imposées par les rulesets GitHub de `main` et `develop` (pas de suppression, pas de force-push, merge uniquement par PR).
 
