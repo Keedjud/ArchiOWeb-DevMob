@@ -1,7 +1,7 @@
-name: Tâche
+name: Task
 description: Une fonctionnalité ou un travail à réaliser
-title: "[Tâche] "
-labels: ["tâche"]
+title: "[Task] "
+labels: ["task"]
 body:
   - type: textarea
     id: description
