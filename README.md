@@ -23,6 +23,15 @@ Application mobile de « bombes » géolocalisées, développée dans le cadre d
 
 Camilo, BenBOUM, Inoé, Elia.
 
+## Installation et prérequis
+
+### Éditeur
+
+Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de base à toute l'équipe (indentation, encodage, fins de ligne). Il ne s'applique qu'aux fichiers de ce repo et ne modifie pas vos réglages personnels.
+
+- **VS Code** : installer l'extension [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) (`EditorConfig.EditorConfig`). VS Code la propose automatiquement à l'ouverture du projet (voir `.vscode/extensions.json`).
+- **WebStorm / IntelliJ** : rien à installer, EditorConfig est pris en charge nativement.
+
 ## Workflow d'équipe
 
 ### Branches
