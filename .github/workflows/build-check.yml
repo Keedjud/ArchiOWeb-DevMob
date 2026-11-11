@@ -1,0 +1,37 @@
+name: Build check
+
+# Le job "build" est exigé par le ruleset de main : il doit toujours exister et passer.
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Tant que api/ ou app/ n'ont pas de package.json, l'étape est simplement ignorée.
+      - name: Install & build api
+        if: hashFiles('api/package.json') != ''
+        working-directory: api
+        run: |
+          npm ci
+          npm run build --if-present
+          npm test --if-present
+
+      - name: Install & build app
+        if: hashFiles('app/package.json') != ''
+        working-directory: app
+        run: |
+          npm ci
+          npm run build --if-present

@@ -1,0 +1,33 @@
+name: Task
+description: Une fonctionnalité ou un travail à réaliser
+title: "[Task] "
+labels: ["task"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Qu'est-ce qu'il faut faire, et pourquoi ?
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Critères de fin
+      description: À quoi voit-on que c'est terminé ?
+      placeholder: |
+        - [ ] …
+        - [ ] …
+    validations:
+      required: true
+  - type: dropdown
+    id: part
+    attributes:
+      label: Partie concernée
+      options:
+        - API
+        - App mobile
+        - Conception / doc
+        - Infra / CI
+    validations:
+      required: true
