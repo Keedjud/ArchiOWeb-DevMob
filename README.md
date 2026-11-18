@@ -82,14 +82,14 @@ Sinon, installer [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), p
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.41.0/install.sh | bash
 ```
 
-Une fois le repo cloné (étape 5), depuis son dossier :
+Puis installer Node 26 et en faire la version par défaut :
 
 ```bash
-nvm install
+nvm install 26
 nvm alias default 26
 ```
 
-`nvm install` lit la version dans le fichier `.nvmrc`. Si vous utilisez déjà un autre outil (fnm, mise, volta…), installez simplement Node 26 avec.
+La version du projet est indiquée dans le fichier `.nvmrc`. Si vous utilisez déjà un autre outil (fnm, mise, volta…), installez simplement Node 26 avec.
 
 ### 4. Docker (en ligne de commande dans WSL)
 
@@ -141,7 +141,7 @@ docker compose up -d
 docker compose exec mongo mongosh --quiet --eval 'db.runCommand({ping:1})'
 ```
 
-La deuxième commande doit afficher `{ ok: 1 }`. Pour arrêter MongoDB (les données sont conservées) : `docker compose stop`.
+La deuxième commande doit afficher `{ ok: 1 }`. Si elle échoue juste après le démarrage, attendre quelques secondes (MongoDB démarre) et la relancer. Pour arrêter MongoDB (les données sont conservées) : `docker compose stop`.
 
 ### 7. VS Code
 
@@ -150,7 +150,7 @@ La deuxième commande doit afficher `{ ok: 1 }`. Pour arrêter MongoDB (les donn
   (si `code` n'est pas trouvé : ouvrir VS Code → **Connect to WSL** → **Open Folder**).
 - Accepter les **extensions recommandées** proposées à l'ouverture (voir `.vscode/extensions.json`).
 
-Le code est formaté automatiquement par **Prettier** à chaque enregistrement, grâce à l'extension recommandée (réglages dans `.prettierrc` et `.vscode/settings.json`). Pour tout formater en ligne de commande : `npx prettier --write .`. La CI vérifie le formatage et refuse une PR mal formatée.
+Le code est formaté automatiquement par **Prettier** à chaque enregistrement, grâce à l'extension recommandée (réglages dans `.prettierrc` et `.vscode/settings.json`). En ligne de commande (même version que la CI) : `npx prettier@3.10.1 --write .` formate tout le repo, `npx prettier@3.10.1 --check .` vérifie sans rien modifier. La CI vérifie le formatage et refuse une PR mal formatée.
 
 Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de base à toute l'équipe (indentation, encodage, fins de ligne). Il ne s'applique qu'aux fichiers de ce repo et ne modifie pas vos réglages personnels. Il est pris en charge par l'extension [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) (recommandée) et nativement par WebStorm / IntelliJ.
 
@@ -160,15 +160,17 @@ Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de b
 
 - `main` : version déployée. On n'y pousse jamais directement.
 - `develop` : branche d'intégration, où l'on teste l'ensemble.
-- `feature/<description>` : une nouvelle fonctionnalité (ex. `feature/pose-bombe`).
-- `fix/<description>` : la correction d'un bug (ex. `fix/notif-double`).
+- `feature/<description>` : une nouvelle fonctionnalité (ex. `feature/drop-bomb`).
+- `fix/<description>` : la correction d'un bug (ex. `fix/duplicate-notification`).
+- `chore/<description>` : configuration, outillage, CI (ex. `chore/update-ci`).
+- `docs/<description>` : documentation (ex. `docs/uml-diagram`).
 
-Les branches `feature/` et `fix/` partent toujours de `develop` :
+Toutes ces branches partent de `develop` :
 
 ```bash
 git switch develop
 git pull
-git switch -c feature/ma-fonctionnalite
+git switch -c feature/my-feature
 ```
 
 ### Pull requests
@@ -178,7 +180,7 @@ git switch -c feature/ma-fonctionnalite
    ```bash
    git switch develop
    git pull
-   git switch feature/ma-fonctionnalite
+   git switch feature/my-feature
    git merge develop
    ```
 
@@ -186,18 +188,23 @@ git switch -c feature/ma-fonctionnalite
 3. Au moins **1 approbation** d'un autre membre est nécessaire pour fusionner.
 4. **Une PR qui a des conflits n'est pas reviewée.** C'est à l'auteur de la PR de les résoudre (en refaisant l'étape 1), puis de redemander une review.
 5. Pour une mise en production, ouvrir une PR **`develop` → `main`** : elle demande 1 approbation et que le check CI `build` passe.
-6. Supprimer la branche une fois fusionnée.
+6. Après le merge, la branche est supprimée automatiquement sur GitHub. En local : `git switch develop && git pull`, puis `git branch -d <nom-de-la-branche>`.
 
 Les règles sont imposées par les rulesets GitHub de `main` et `develop` (pas de suppression, pas de force-push, merge uniquement par PR).
 
+### Langue
+
+- Les **noms** sont en anglais : branches, code (variables, fonctions, routes), fichiers, labels et messages de commit.
+- Les **textes** peuvent être en français : README, documentation, issues, PR et commentaires dans le code.
+
 ### Messages de commit
 
-Courts, au présent, préfixés par le type de changement :
+En anglais, courts, au présent, préfixés par le type de changement :
 
-- `feat: pose d'une bombe géolocalisée`
-- `fix: notification envoyée deux fois`
-- `docs: ajout du diagramme UML`
-- `chore: configuration de la CI`
+- `feat: drop a geolocated bomb`
+- `fix: notification sent twice`
+- `docs: add UML diagram`
+- `chore: set up CI`
 
 ## Backlog et bugs
 
