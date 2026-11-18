@@ -2,6 +2,7 @@
   "recommendations": [
     "EditorConfig.EditorConfig",
     "ms-vscode-remote.remote-wsl",
-    "mongodb.mongodb-vscode"
+    "mongodb.mongodb-vscode",
+    "esbenp.prettier-vscode"
   ]
 }
