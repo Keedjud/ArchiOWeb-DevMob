@@ -141,6 +141,8 @@ La deuxième commande doit afficher `{ ok: 1 }`. Pour arrêter MongoDB (les donn
   (si `code` n'est pas trouvé : ouvrir VS Code → **Connect to WSL** → **Open Folder**).
 - Accepter les **extensions recommandées** proposées à l'ouverture (voir `.vscode/extensions.json`).
 
+Le code est formaté automatiquement par **Prettier** à chaque enregistrement, grâce à l'extension recommandée (réglages dans `.prettierrc` et `.vscode/settings.json`). Pour tout formater en ligne de commande : `npx prettier --write .`. La CI vérifie le formatage et refuse une PR mal formatée.
+
 Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de base à toute l'équipe (indentation, encodage, fins de ligne). Il ne s'applique qu'aux fichiers de ce repo et ne modifie pas vos réglages personnels. Il est pris en charge par l'extension [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) (recommandée) et nativement par WebStorm / IntelliJ.
 
 ## Workflow d'équipe
