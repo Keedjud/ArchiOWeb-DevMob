@@ -41,23 +41,32 @@ Toutes les commandes suivantes se tapent **dans le terminal Ubuntu**. On peut y 
 
 Le code se met dans le Linux (`~/dev`), **jamais sous `/mnt/c/...`** (très lent).
 
-### 2. Git et GitHub CLI
+### 2. Git et connexion à GitHub
 
-Vérifier :
+Vérifier que git est installé et configuré (nom et e-mail affichés) :
 
 ```bash
 git --version
-gh auth status
+git config --global user.name
+git config --global user.email
 ```
 
 Sinon :
 
 ```bash
-sudo apt update && sudo apt install -y git gh
-gh auth login
+sudo apt update && sudo apt install -y git
 git config --global user.name "Prénom Nom"
 git config --global user.email "adresse@exemple.ch"
 ```
+
+Pour pouvoir **pousser** sur GitHub, git doit être connecté à votre compte. Si `git push` a déjà marché depuis WSL, il n'y a rien à faire. Sinon, le plus simple est d'utiliser GitHub CLI, qui sert uniquement à connecter git à votre compte (connexion dans le navigateur) :
+
+```bash
+sudo apt install -y gh
+gh auth login
+```
+
+Alternative : ajouter une clé SSH à son compte GitHub et cloner avec l'adresse `git@github.com:Keedjud/ArchiOWeb-DevMob.git`.
 
 ### 3. Node.js 26
 
@@ -119,7 +128,7 @@ docker run --rm hello-world
 
 ```bash
 mkdir -p ~/dev
-gh repo clone Keedjud/ArchiOWeb-DevMob ~/dev/ArchiOWeb-DevMob
+git clone https://github.com/Keedjud/ArchiOWeb-DevMob.git ~/dev/ArchiOWeb-DevMob
 cd ~/dev/ArchiOWeb-DevMob
 ```
 
