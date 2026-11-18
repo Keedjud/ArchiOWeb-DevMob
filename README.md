@@ -12,13 +12,13 @@ Application mobile de « bombes » géolocalisées, développée dans le cadre d
 
 ## Structure du repo
 
-| Dossier | Contenu | Technologies |
-|---|---|---|
-| `api/` | API REST, déployée sur Render | Node.js, Express, MongoDB |
-| `app/` | Application mobile | Vue, Capacitor |
-| `docs/` | UML, modèle de données, doc de l'API | |
-| `.github/workflows/` | Intégration continue (GitHub Actions) | |
-| `compose.yml` | MongoDB local pour le développement | Docker Compose |
+| Dossier              | Contenu                               | Technologies              |
+| -------------------- | ------------------------------------- | ------------------------- |
+| `api/`               | API REST, déployée sur Render         | Node.js, Express, MongoDB |
+| `app/`               | Application mobile                    | Vue, Capacitor            |
+| `docs/`              | UML, modèle de données, doc de l'API  |                           |
+| `.github/workflows/` | Intégration continue (GitHub Actions) |                           |
+| `compose.yml`        | MongoDB local pour le développement   | Docker Compose            |
 
 ## Préparer son environnement de dev
 
