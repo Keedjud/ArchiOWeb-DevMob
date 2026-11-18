@@ -20,6 +20,9 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Check formatting
+        run: npx --yes prettier@3.10.1 --check .
+
       # Tant que api/ ou app/ n'ont pas de package.json, l'étape est simplement ignorée.
       - name: Install & build api
         if: hashFiles('api/package.json') != ''
