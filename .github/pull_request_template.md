@@ -13,6 +13,6 @@ Closes #
 ## Checklist
 
 - [ ] La PR vise `develop` (ou `main` uniquement pour une mise en production)
-- [ ] La branche suit la convention `feature/…` ou `fix/…`
+- [ ] La branche suit la convention `feature/…`, `fix/…`, `chore/…` ou `docs/…`
 - [ ] Le code a été testé localement
 - [ ] Les tests et la documentation ont été mis à jour si nécessaire

@@ -33,7 +33,9 @@ body:
       options:
         - API
         - App mobile
-        - Les deux / ne sait pas
+        - Conception / doc
+        - Infra / CI
+        - Plusieurs / ne sait pas
     validations:
       required: true
   - type: textarea

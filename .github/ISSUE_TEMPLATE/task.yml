@@ -29,5 +29,6 @@ body:
         - App mobile
         - Conception / doc
         - Infra / CI
+        - Plusieurs / ne sait pas
     validations:
       required: true
