@@ -1,3 +1,7 @@
 {
-  "recommendations": ["EditorConfig.EditorConfig"]
+  "recommendations": [
+    "EditorConfig.EditorConfig",
+    "ms-vscode-remote.remote-wsl",
+    "mongodb.mongodb-vscode"
+  ]
 }
