@@ -12,21 +12,147 @@ Application mobile de « bombes » géolocalisées, développée dans le cadre d
 
 ## Structure du repo
 
-| Dossier | Contenu | Technologies |
-|---|---|---|
-| `api/` | API REST, déployée sur Render | Node.js, Express, MongoDB |
-| `app/` | Application mobile | Vue, Capacitor |
-| `docs/` | UML, modèle de données, doc de l'API | |
-| `.github/workflows/` | Intégration continue (GitHub Actions) | |
+| Dossier              | Contenu                               | Technologies              |
+| -------------------- | ------------------------------------- | ------------------------- |
+| `api/`               | API REST, déployée sur Render         | Node.js, Express, MongoDB |
+| `app/`               | Application mobile                    | Vue, Capacitor            |
+| `docs/`              | UML, modèle de données, doc de l'API  |                           |
+| `.github/workflows/` | Intégration continue (GitHub Actions) |                           |
+| `compose.yml`        | MongoDB local pour le développement   | Docker Compose            |
 
-## Installation et prérequis
+## Préparer son environnement de dev
 
-### Éditeur
+On développe tous **dans WSL 2 (Ubuntu)**, pour avoir le même environnement que la CI et le serveur. Chaque étape commence par une **vérification** : si c'est déjà bon, passer à l'étape suivante.
 
-Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de base à toute l'équipe (indentation, encodage, fins de ligne). Il ne s'applique qu'aux fichiers de ce repo et ne modifie pas vos réglages personnels.
+### 1. WSL 2 et Ubuntu
 
-- **VS Code** : installer l'extension [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) (`EditorConfig.EditorConfig`). VS Code la propose automatiquement à l'ouverture du projet (voir `.vscode/extensions.json`).
-- **WebStorm / IntelliJ** : rien à installer, EditorConfig est pris en charge nativement.
+Vérifier, dans un **PowerShell Windows** :
+
+```powershell
+wsl -l -v
+```
+
+Il faut une distribution **Ubuntu** (22.04 ou 24.04) avec `VERSION` à **2**.
+
+- Si `VERSION` vaut 1 : `wsl --set-version <nom-de-la-distribution> 2`
+- S'il n'y a pas d'Ubuntu : `wsl --install -d Ubuntu-24.04`
+
+Toutes les commandes suivantes se tapent **dans le terminal Ubuntu**. On peut y vérifier sa version avec `lsb_release -d`.
+
+Le code se met dans le Linux (`~/dev`), **jamais sous `/mnt/c/...`** (très lent).
+
+### 2. Git et connexion à GitHub
+
+Vérifier que git est installé et configuré (nom et e-mail affichés) :
+
+```bash
+git --version
+git config --global user.name
+git config --global user.email
+```
+
+Sinon :
+
+```bash
+sudo apt update && sudo apt install -y git
+git config --global user.name "Prénom Nom"
+git config --global user.email "adresse@exemple.ch"
+```
+
+Pour pouvoir **pousser** sur GitHub, git doit être connecté à votre compte. Si `git push` a déjà marché depuis WSL, il n'y a rien à faire. Sinon, le plus simple est d'utiliser GitHub CLI, qui sert uniquement à connecter git à votre compte (connexion dans le navigateur) :
+
+```bash
+sudo apt install -y gh
+gh auth login
+```
+
+Alternative : ajouter une clé SSH à son compte GitHub et cloner avec l'adresse `git@github.com:Keedjud/ArchiOWeb-DevMob.git`.
+
+### 3. Node.js 26
+
+Vérifier (doit afficher `v26.x`) :
+
+```bash
+node -v
+```
+
+Sinon, installer [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), puis **fermer et rouvrir le terminal** :
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.41.0/install.sh | bash
+```
+
+Une fois le repo cloné (étape 5), depuis son dossier :
+
+```bash
+nvm install
+nvm alias default 26
+```
+
+`nvm install` lit la version dans le fichier `.nvmrc`. Si vous utilisez déjà un autre outil (fnm, mise, volta…), installez simplement Node 26 avec.
+
+### 4. Docker (en ligne de commande dans WSL)
+
+Docker sert à lancer MongoDB en local. Vérifier :
+
+```bash
+docker --version
+docker compose version
+```
+
+Si Docker Desktop est déjà installé avec l'intégration WSL activée, il n'y a rien à faire. Sinon, installer **Docker Engine** dans Ubuntu (pas besoin de Docker Desktop), en suivant la [doc officielle](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) :
+
+```bash
+sudo apt update && sudo apt install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo $VERSION_CODENAME) stable" | sudo tee /etc/apt/sources.list.d/docker.list
+sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker $USER
+```
+
+Docker a besoin de **systemd** pour démarrer tout seul : `cat /etc/wsl.conf` doit contenir :
+
+```ini
+[boot]
+systemd=true
+```
+
+Sinon, l'ajouter (`sudo nano /etc/wsl.conf`). Puis redémarrer WSL, dans PowerShell : `wsl --shutdown`, et rouvrir le terminal Ubuntu. Tester :
+
+```bash
+docker run --rm hello-world
+```
+
+### 5. Cloner le repo
+
+```bash
+mkdir -p ~/dev
+git clone https://github.com/Keedjud/ArchiOWeb-DevMob.git ~/dev/ArchiOWeb-DevMob
+cd ~/dev/ArchiOWeb-DevMob
+```
+
+### 6. Lancer MongoDB
+
+À la racine du repo :
+
+```bash
+docker compose up -d
+docker compose exec mongo mongosh --quiet --eval 'db.runCommand({ping:1})'
+```
+
+La deuxième commande doit afficher `{ ok: 1 }`. Pour arrêter MongoDB (les données sont conservées) : `docker compose stop`.
+
+### 7. VS Code
+
+- Installer [VS Code](https://code.visualstudio.com/) côté Windows, avec l'extension **WSL** (`ms-vscode-remote.remote-wsl`).
+- Dans le terminal Ubuntu, depuis le repo : `code .`
+  (si `code` n'est pas trouvé : ouvrir VS Code → **Connect to WSL** → **Open Folder**).
+- Accepter les **extensions recommandées** proposées à l'ouverture (voir `.vscode/extensions.json`).
+
+Le code est formaté automatiquement par **Prettier** à chaque enregistrement, grâce à l'extension recommandée (réglages dans `.prettierrc` et `.vscode/settings.json`). Pour tout formater en ligne de commande : `npx prettier --write .`. La CI vérifie le formatage et refuse une PR mal formatée.
+
+Le repo contient un fichier `.editorconfig` qui impose les mêmes réglages de base à toute l'équipe (indentation, encodage, fins de ligne). Il ne s'applique qu'aux fichiers de ce repo et ne modifie pas vos réglages personnels. Il est pris en charge par l'extension [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig) (recommandée) et nativement par WebStorm / IntelliJ.
 
 ## Workflow d'équipe
 
