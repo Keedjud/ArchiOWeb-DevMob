@@ -5,6 +5,10 @@ import logger from 'morgan';
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
+import mongoose from 'mongoose';
+
+await mongoose.connect(process.env.DATABASE_URL ?? 'mongodb://127.0.0.1/bomb');
+
 const app = express();
 
 app.use(logger('dev'));
